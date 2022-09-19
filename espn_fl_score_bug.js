@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name     			ESPN Fantasy League Score Bug for Greasemonkey
+// @name     		ESPN Fantasy League Score Bug for Greasemonkey
 // @description		Changes the ESPN Fantasy Football League Scoreboard page to display match scores and stats
-// @version  			1
-// @grant    			none
-// @match					https://fantasy.espn.com/football/league/scoreboard*
+// @version  		1
+// @grant    		none
+// @match			https://fantasy.espn.com/football/league/scoreboard*
 // ==/UserScript==
 
 
@@ -25,10 +25,10 @@ const add_global_styles = (css_string) => {
     head = document.getElementsByTagName('head')[0];
   
     if (head) {
-      style = document.createElement('style');
-      style.type = 'text/css';
-      style.innerHTML = css_string;
-      head.appendChild(style);
+		style = document.createElement('style');
+		style.type = 'text/css';
+		style.innerHTML = css_string;
+		head.appendChild(style);
     }
 }
 
@@ -235,7 +235,7 @@ custom_css = `
 		left: -20px;
 		background-color: white;
 		height 50px;
-    width: 220px;
+		width: 220px;
 		padding-left: 30px;
 		margin-left: -20px;
 		font-weight: bold;
@@ -263,18 +263,18 @@ add_global_styles(custom_css.replaceAll("\;", " !important\;"));
 
 // Checks that an element has height or width to determine if it's visible
 const is_element_visible = (element) => {
-  return element.offsetWidth > 0 || element.offsetHeight > 0;
+	return element.offsetWidth > 0 || element.offsetHeight > 0;
 }
 
 // Uses an interval to wait for the specified element to render then resolves
 const wait_for_element_to_render = (element) => {
   return new Promise(resolve => {
-      let interval = setInterval(() => {
-        if (is_element_visible(element)) {
-					resolve();
-        }
-      }, 25);
-    });
+		let interval = setInterval(() => {
+			if (is_element_visible(element)) {
+				resolve();
+			}
+		}, 25);
+	});
 }
 
 
@@ -282,305 +282,305 @@ const wait_for_element_to_render = (element) => {
 const wait_for_image_to_have_link = (element) => {
   return new Promise(resolve => {
     let interval = setInterval(() => {
-      let is_standard_link = element.src.startsWith("http");
+			let is_standard_link = element.src.startsWith("http");
 
 
-      if (is_standard_link) {
-        clearInterval(interval);
-        resolve();
-      }
-    }, 25);
-  });
+			if (is_standard_link) {
+				clearInterval(interval);
+				resolve();
+			}
+		}, 25);
+	});
 }
 
 
 // Makes the player_ranks div and treturns it, or returns false if there are no player stats
 const make_player_ranks_element = (original_player_ranks_div) => {
 	// Create the ticker teams player ranking container and assign its id and clone the 
-  // appropriate original player_rank div
+	// appropriate original player_rank div
 
 	let original_player_ranks_div_clone = document.createElement("div");
 	original_player_ranks_div_clone.innerHTML = original_player_ranks_div.outerHTML;
 
 
-  let ticker_player_rank_container_div = document.createElement("div");
-  ticker_player_rank_container_div.id = "ticker_player_rank_container";
-  ticker_player_rank_container_div.classList.add("fade_out");
-  
-  
-  let original_player_ranks_div_clone_images = original_player_ranks_div_clone.querySelectorAll("img");
-  let original_player_ranks_div_clone_names = original_player_ranks_div_clone.querySelectorAll(".Athlete__PlayerWrapper > h3");
-  let original_player_ranks_div_clone_stats = original_player_ranks_div_clone.querySelectorAll(".Athlete__Stats span");
-  let ranking_type_text = document.querySelectorAll(".ranking-type-text");
-    
-  if (original_player_ranks_div_clone_images.length > 0) {
-    let stats_title = document.createElement("div");
-    stats_title.id = "stats_title";
-    stats_title.innerText = ranking_type_text ? ranking_type_text[0].innerText : "";
-    
-    
-    for (let i = 0; i < original_player_ranks_div_clone_images.length; i++) {
-      let player_rank_container_div = document.createElement("div");
-      player_rank_container_div.classList.add("player_rank_container");
-      
-      let player_name_container_div = document.createElement("h4");
-      player_name_container_div.classList.add("player_rank_name");
-      
-      let player_stat_container_div = document.createElement("h3");
-      player_stat_container_div.classList.add("player_rank_stat");
-      
-      player_name_container_div.innerText = original_player_ranks_div_clone_names[i].innerText;
-      player_stat_container_div.innerText = original_player_ranks_div_clone_stats[i].innerText;
-      
-      player_rank_container_div.append(player_name_container_div);
-      player_rank_container_div.append(player_stat_container_div);
-      
-      // find image in dom and wait for url and make new image
-      let image_in_dom = document.querySelectorAll(`img[title='${original_player_ranks_div_clone_images[i].title}']`)[0]
+	let ticker_player_rank_container_div = document.createElement("div");
+	ticker_player_rank_container_div.id = "ticker_player_rank_container";
+	ticker_player_rank_container_div.classList.add("fade_out");
 
-      wait_for_image_to_have_link(image_in_dom).then(() => {
-        let new_image_element = document.createElement("img");
+	  
+	let original_player_ranks_div_clone_images = original_player_ranks_div_clone.querySelectorAll("img");
+	let original_player_ranks_div_clone_names = original_player_ranks_div_clone.querySelectorAll(".Athlete__PlayerWrapper > h3");
+	let original_player_ranks_div_clone_stats = original_player_ranks_div_clone.querySelectorAll(".Athlete__Stats span");
+	let ranking_type_text = document.querySelectorAll(".ranking-type-text");
+		
+	if (original_player_ranks_div_clone_images.length > 0) {
+		let stats_title = document.createElement("div");
+		stats_title.id = "stats_title";
+		stats_title.innerText = ranking_type_text ? ranking_type_text[0].innerText : "";
+		
+		
+		for (let i = 0; i < original_player_ranks_div_clone_images.length; i++) {
+			let player_rank_container_div = document.createElement("div");
+			player_rank_container_div.classList.add("player_rank_container");
 
-        new_image_element.src = image_in_dom.src.replace("h=80&w=80", `h=${PLAYER_RANK_IMAGE_SIZE}&w=${PLAYER_RANK_IMAGE_SIZE}`);
-        
-        ticker_player_rank_container_div.append(new_element)
-        ticker_player_rank_container_div.append(new_image_element);
-        ticker_player_rank_container_div.append(player_rank_container_div);
-      });
-    }
-  } 
-  else {
-    ticker_player_rank_container_div.innerHTML = "<h1 style='color: #444' >No Player Data</h1>";
-  }
+			let player_name_container_div = document.createElement("h4");
+			player_name_container_div.classList.add("player_rank_name");
+
+			let player_stat_container_div = document.createElement("h3");
+			player_stat_container_div.classList.add("player_rank_stat");
+
+			player_name_container_div.innerText = original_player_ranks_div_clone_names[i].innerText;
+			player_stat_container_div.innerText = original_player_ranks_div_clone_stats[i].innerText;
+
+			player_rank_container_div.append(player_name_container_div);
+			player_rank_container_div.append(player_stat_container_div);
+
+			// find image in dom and wait for url and make new image
+			let image_in_dom = document.querySelectorAll(`img[title='${original_player_ranks_div_clone_images[i].title}']`)[0]
+
+			wait_for_image_to_have_link(image_in_dom).then(() => {
+			let new_image_element = document.createElement("img");
+
+			new_image_element.src = image_in_dom.src.replace("h=80&w=80", `h=${PLAYER_RANK_IMAGE_SIZE}&w=${PLAYER_RANK_IMAGE_SIZE}`);
+
+			ticker_player_rank_container_div.append(new_element)
+			ticker_player_rank_container_div.append(new_image_element);
+			ticker_player_rank_container_div.append(player_rank_container_div);
+			});
+		}
+	} 
+	else {
+		ticker_player_rank_container_div.innerHTML = "<h1 style='color: #444' >No Player Data</h1>";
+	}
   
-  return ticker_player_rank_container_div;
+	return ticker_player_rank_container_div;
 }
 
 
 const make_ticker_status_element = (status_labels) => {
-  let ticker_status_container_div = document.createElement("div");
-  let ticker_currently_playing_container_div = document.createElement("div");
-  let ticker_yet_to_play_container_div = document.createElement("div");
-  let ticker_proj_total_container_div = document.createElement("div");
-  let ticker_mins_left_container_div = document.createElement("div");
- 
-  ticker_status_container_div.id = "ticker_status_container";
-  ticker_currently_playing_container_div.id = "ticker_currently_playing_container";
-  ticker_yet_to_play_container_div.id = "ticker_yet_to_play_container";
-  ticker_proj_total_container_div.id = "ticker_proj_total_container";
-  ticker_mins_left_container_div.id = "ticker_mins_left_container";
-  
-  ticker_currently_playing_container_div.innerHTML = status_labels[0];
-  ticker_yet_to_play_container_div.innerHTML = status_labels[1];
-  ticker_proj_total_container_div.innerHTML = status_labels[2];
-  ticker_mins_left_container_div.innerHTML = status_labels[3];
-  
-  ticker_status_container_div.append(ticker_currently_playing_container_div);
-  ticker_status_container_div.append(ticker_yet_to_play_container_div);
-  ticker_status_container_div.append(ticker_proj_total_container_div);
-  ticker_status_container_div.append(ticker_mins_left_container_div);
-  
-  return ticker_status_container_div;
+	let ticker_status_container_div = document.createElement("div");
+	let ticker_currently_playing_container_div = document.createElement("div");
+	let ticker_yet_to_play_container_div = document.createElement("div");
+	let ticker_proj_total_container_div = document.createElement("div");
+	let ticker_mins_left_container_div = document.createElement("div");
+
+	ticker_status_container_div.id = "ticker_status_container";
+	ticker_currently_playing_container_div.id = "ticker_currently_playing_container";
+	ticker_yet_to_play_container_div.id = "ticker_yet_to_play_container";
+	ticker_proj_total_container_div.id = "ticker_proj_total_container";
+	ticker_mins_left_container_div.id = "ticker_mins_left_container";
+
+	ticker_currently_playing_container_div.innerHTML = status_labels[0];
+	ticker_yet_to_play_container_div.innerHTML = status_labels[1];
+	ticker_proj_total_container_div.innerHTML = status_labels[2];
+	ticker_mins_left_container_div.innerHTML = status_labels[3];
+
+	ticker_status_container_div.append(ticker_currently_playing_container_div);
+	ticker_status_container_div.append(ticker_yet_to_play_container_div);
+	ticker_status_container_div.append(ticker_proj_total_container_div);
+	ticker_status_container_div.append(ticker_mins_left_container_div);
+
+	return ticker_status_container_div;
 }
 
 
 
 const make_element_with_id = (tag, id) => {
 	let new_div = document.createElement(tag);
-  new_div.id = id;
+	new_div.id = id;
   
-  return new_div;
+	return new_div;
 }
 
 
 const wait_n_seconds = (seconds) => {
 	let wait_time_in_ms = seconds * 1000;
-  
-  return new Promise (resolve => {
-  	setTimeout(() => {
-    	resolve();
-    }, wait_time_in_ms)
-  });
+
+	return new Promise (resolve => {
+		setTimeout(() => {
+			resolve();
+		}, wait_time_in_ms)
+	});
 }
 
 
 const do_fading_transitions = () => {
 	return new Promise(resolve => {
         
-  	wait_n_seconds(TIME_BETWEEN_DATA_CHANGE).then(() => {
-      document.getElementById("ticker_team_name_container").classList.add("fade_out");
-      document.getElementById("ticker_status_container").classList.add("fade_out");
+		wait_n_seconds(TIME_BETWEEN_DATA_CHANGE).then(() => {
+			document.getElementById("ticker_team_name_container").classList.add("fade_out");
+			document.getElementById("ticker_status_container").classList.add("fade_out");
 
 
-      wait_n_seconds(FADE_TRANSITION_SPEED).then(() => {
-        document.getElementById("ticker_player_rank_container").classList.remove("fade_out");
-        
-        wait_n_seconds(FADE_TRANSITION_SPEED + TIME_BETWEEN_DATA_CHANGE).then(() => {
-        	resolve();
-        });
-      });
-    });
-  });
+			wait_n_seconds(FADE_TRANSITION_SPEED).then(() => {
+				document.getElementById("ticker_player_rank_container").classList.remove("fade_out");
+
+				wait_n_seconds(FADE_TRANSITION_SPEED + TIME_BETWEEN_DATA_CHANGE).then(() => {
+					resolve();
+				});
+			});
+		});
+	});
 }
 
 
 const hide_ticker_info_container = () => {
 	return new Promise(resolve => {
-    document.getElementById("ticker_info_container").classList.add("width_to_0");
-    document.getElementById("ticker_team_name_container").classList.add("go_left");
-    document.getElementById("ticker_status_container").classList.add("go_left");
-    document.getElementById("ticker_player_rank_container").classList.add("go_left");
-  	
-    wait_n_seconds(TICKER_INFO_CONTAINER_TRANSITION_SPEED).then(() => {
-    	resolve();
-    });
-  });
+		document.getElementById("ticker_info_container").classList.add("width_to_0");
+		document.getElementById("ticker_team_name_container").classList.add("go_left");
+		document.getElementById("ticker_status_container").classList.add("go_left");
+		document.getElementById("ticker_player_rank_container").classList.add("go_left");
+		
+		wait_n_seconds(TICKER_INFO_CONTAINER_TRANSITION_SPEED).then(() => {
+			resolve();
+		});
+	});
 }
 
 
 const show_ticker_info_container = () => {
 	return new Promise(resolve => {
-    document.getElementById("ticker_info_container").classList.remove("width_to_0");
-    document.getElementById("ticker_team_name_container").classList.remove("go_left");
-    document.getElementById("ticker_status_container").classList.remove("go_left");
-    document.getElementById("ticker_player_rank_container").classList.remove("go_left");
-  	
-    wait_n_seconds(TICKER_INFO_CONTAINER_TRANSITION_SPEED).then(() => {
-    	resolve();
-    });
-  });
+		document.getElementById("ticker_info_container").classList.remove("width_to_0");
+		document.getElementById("ticker_team_name_container").classList.remove("go_left");
+		document.getElementById("ticker_status_container").classList.remove("go_left");
+		document.getElementById("ticker_player_rank_container").classList.remove("go_left");
+		
+		wait_n_seconds(TICKER_INFO_CONTAINER_TRANSITION_SPEED).then(() => {
+			resolve();
+		});
+	});
 }
 
 
 const handle_post_displayed_info = () => {
-  show_ticker_info_container().then(() => {
-    do_fading_transitions().then(() => {
-      hide_ticker_info_container();
-    });
-  });
+	show_ticker_info_container().then(() => {
+		do_fading_transitions().then(() => {
+			hide_ticker_info_container();
+		});
+	});
 }
 
 
 const create_logo_img = (original_logo_element) => {
 	let team_logo_img = make_element_with_id("img", "ticker_team_logo");
 
-  wait_for_image_to_have_link(original_logo_element).then(() => {
-    team_logo_img.src = original_logo_element.src;
-  });
-  
-  return team_logo_img;
+	wait_for_image_to_have_link(original_logo_element).then(() => {
+		team_logo_img.src = original_logo_element.src;
+	});
+
+	return team_logo_img;
 }
 
 
 const change_logo_img = (logo_element, original_logo_element) => {
-  return new Promise(resolve => {
-  	document.getElementById("ticker_team_logo").classList.add("spin_logo");
-  
-    setTimeout(() => {
-      wait_for_image_to_have_link(original_logo_element).then(() => {
-        logo_element.src = original_logo_element.src;
-      });
-      
-      document.getElementById("ticker_team_logo").classList.remove("spin_logo");
-      
-      setTimeout(() => {
-        resolve();
-      }, LOGO_SPIN_TRANSITION_SPEED * 500);
-      
-    }, LOGO_SPIN_TRANSITION_SPEED * 500);
-  });
+	return new Promise(resolve => {
+		document.getElementById("ticker_team_logo").classList.add("spin_logo");
+
+		setTimeout(() => {
+			wait_for_image_to_have_link(original_logo_element).then(() => {
+				logo_element.src = original_logo_element.src;
+			});
+
+			document.getElementById("ticker_team_logo").classList.remove("spin_logo");
+
+			setTimeout(() => {
+				resolve();
+			}, LOGO_SPIN_TRANSITION_SPEED * 500);
+
+		}, LOGO_SPIN_TRANSITION_SPEED * 500);
+	});
 }
 
 
 window.addEventListener('load', () => {
-  // Create the ticker container div and assign id
-  let league_ticker_div = make_element_with_id("div", "league_ticker");
-  let ticker_info_mask_container_div = make_element_with_id("div", "ticker_info_mask_container");
-  let ticker_info_container_div = make_element_with_id("div", "ticker_info_container");
-  ticker_info_container_div.classList.add("width_to_0");
+	// Create the ticker container div and assign id
+	let league_ticker_div = make_element_with_id("div", "league_ticker");
+	let ticker_info_mask_container_div = make_element_with_id("div", "ticker_info_mask_container");
+	let ticker_info_container_div = make_element_with_id("div", "ticker_info_container");
+	ticker_info_container_div.classList.add("width_to_0");
+
+	// Append the team logo, team name, and the ticker info container to the league ticker container
+	league_ticker_div.append(ticker_info_mask_container_div);
+	league_ticker_div.append(ticker_info_container_div);
+
+	// Append the ticker to the body
+	document.body.append(league_ticker_div);
+
+
+	let team_i = 0;
   
-  // Append the team logo, team name, and the ticker info container to the league ticker container
-  league_ticker_div.append(ticker_info_mask_container_div);
-  league_ticker_div.append(ticker_info_container_div);
-  
-  // Append the ticker to the body
-  document.body.append(league_ticker_div);
-  
-  
-  let team_i = 0;
-  
-  let loop_interval = setInterval(() => {
-    let team_logos = document.querySelectorAll(".ScoreboardScoreCell__Logo");
-    let team_names = document.querySelectorAll(".ScoreCell__TeamName");
-    let status_labels = document.querySelectorAll(".statusLabel");
-    let player_ranks = document.querySelectorAll(".player-ranks");
-    let team_count = team_logos.length;
-  	let team_logo_img = document.getElementById("ticker_team_logo");
-  	let team_logo_ready = false;
+	let loop_interval = setInterval(() => {
+		let team_logos = document.querySelectorAll(".ScoreboardScoreCell__Logo");
+		let team_names = document.querySelectorAll(".ScoreCell__TeamName");
+		let status_labels = document.querySelectorAll(".statusLabel");
+		let player_ranks = document.querySelectorAll(".player-ranks");
+		let team_count = team_logos.length;
+		let team_logo_img = document.getElementById("ticker_team_logo");
+		let team_logo_ready = false;
     
-    // Handle the team_logo_img container
-  	if (team_logo_img) {
-      document.getElementById("ticker_info_container").innerHTML = "";
-      
-      change_logo_img(team_logo_img, team_logos[team_i]).then(() => {
-      	team_logo_ready = true;
-      });
-    }
-  	else {
-      team_logo_img = create_logo_img(team_logos[team_i]);
-      
-      league_ticker_div.append(team_logo_img);
-      
-      team_logo_ready = true;
-    }
+		// Handle the team_logo_img container
+		if (team_logo_img) {
+			document.getElementById("ticker_info_container").innerHTML = "";
+		  
+			change_logo_img(team_logo_img, team_logos[team_i]).then(() => {
+				team_logo_ready = true;
+			});
+		}
+		else {
+			team_logo_img = create_logo_img(team_logos[team_i]);
+		  
+			league_ticker_div.append(team_logo_img);
+		  
+			team_logo_ready = true;
+		}
   	
 
-    // Build the status label array for make_ticker_status_element
-    let team_offset = team_i === 0 ? 0 : (team_i * 4); // Adjusts for the status count and the current team in the loop
-    let ticker_status_labels_array = [
-      status_labels[0 + team_offset].outerHTML.replace("statusLabel", "ticker_status_label").replace("statusValue", "ticker_status_value"),
-      status_labels[1 + team_offset].outerHTML.replace("statusLabel", "ticker_status_label").replace("statusValue", "ticker_status_value"),
-      status_labels[2 + team_offset].outerHTML.replace("statusLabel", "ticker_status_label").replace("statusValue", "ticker_status_value"),
-      status_labels[3 + team_offset].outerHTML.replace("statusLabel", "ticker_status_label").replace("statusValue", "ticker_status_value"),
-    ]
+		// Build the status label array for make_ticker_status_element
+		let team_offset = team_i === 0 ? 0 : (team_i * 4); // Adjusts for the status count and the current team in the loop
+		let ticker_status_labels_array = [
+			  status_labels[0 + team_offset].outerHTML.replace("statusLabel", "ticker_status_label").replace("statusValue", "ticker_status_value"),
+			  status_labels[1 + team_offset].outerHTML.replace("statusLabel", "ticker_status_label").replace("statusValue", "ticker_status_value"),
+			  status_labels[2 + team_offset].outerHTML.replace("statusLabel", "ticker_status_label").replace("statusValue", "ticker_status_value"),
+			  status_labels[3 + team_offset].outerHTML.replace("statusLabel", "ticker_status_label").replace("statusValue", "ticker_status_value"),
+		]
 
 
-    // Create the ticker status' container and its children and the ids
-    let ticker_status_container_div = make_ticker_status_element(ticker_status_labels_array);
+		// Create the ticker status' container and its children and the ids
+		let ticker_status_container_div = make_ticker_status_element(ticker_status_labels_array);
 
-    // Create the ticker team name container and assign id and set the team name as innerText
-    let ticker_team_name_container_div = make_element_with_id("div", "ticker_team_name_container");
-    ticker_team_name_container_div.innerText = team_names[team_i].innerText;
+		// Create the ticker team name container and assign id and set the team name as innerText
+		let ticker_team_name_container_div = make_element_with_id("div", "ticker_team_name_container");
+		ticker_team_name_container_div.innerText = team_names[team_i].innerText;
 
-    let ticker_player_rank_container_div = make_player_ranks_element(player_ranks[team_i]);
+		let ticker_player_rank_container_div = make_player_ranks_element(player_ranks[team_i]);
 		
     
-    ticker_status_container_div.classList.add("go_left");
-    ticker_team_name_container_div.classList.add("go_left");
-    ticker_player_rank_container_div.classList.add("go_left");
+		ticker_status_container_div.classList.add("go_left");
+		ticker_team_name_container_div.classList.add("go_left");
+		ticker_player_rank_container_div.classList.add("go_left");
 
-    // Append the status' and player ranks to the ticker info container
-    ticker_info_container_div.append(ticker_team_name_container_div);
-    ticker_info_container_div.append(ticker_status_container_div);
-    ticker_info_container_div.append(ticker_player_rank_container_div);
+		// Append the status' and player ranks to the ticker info container
+		ticker_info_container_div.append(ticker_team_name_container_div);
+		ticker_info_container_div.append(ticker_status_container_div);
+		ticker_info_container_div.append(ticker_player_rank_container_div);
 
-    // Makes sure the logo has finished loading and spinning
-    // Then handles the rest of the transitions
+		// Makes sure the logo has finished loading and spinning
+		// Then handles the rest of the transitions
 		let show_info_interval = setInterval(() => {
-      if (team_logo_ready) {
+			if (team_logo_ready) {
 				handle_post_displayed_info();
-        clearInterval(show_info_interval);
-      }
-    }, 25);
+				clearInterval(show_info_interval);
+			}
+		}, 25);
   
     
-    // Loop Control
-    if (team_i < (team_count -1)) { 
-    	team_i += 1;
-    }
-    else {
-      team_i = 0;
-    }
+		// Loop Control
+		if (team_i < (team_count -1)) { 
+			team_i += 1;
+		}
+		else {
+		  team_i = 0;
+		}
     
-  }, TOTAL_LOOP_TIME_IN_MS);
+	}, TOTAL_LOOP_TIME_IN_MS);
 });

@@ -1,8 +1,9 @@
 // ==UserScript==
-// @name     ESPN Fantasy League Score Bug
-// @version  1
-// @grant    none
-// @match 	 https://fantasy.espn.com/football/league/scoreboard*
+// @name     			ESPN Fantasy League Score Bug for Greasemonkey
+// @description		Changes the ESPN Fantasy Football League Scoreboard page to display match scores and stats
+// @version  			1
+// @grant    			none
+// @match					https://fantasy.espn.com/football/league/scoreboard*
 // ==/UserScript==
 
 
@@ -155,7 +156,7 @@ custom_css = `
 	}
 
 	#ticker_currently_playing_container,  #ticker_yet_to_play_container, 
-  #ticker_proj_total_container, #ticker_mins_left_container {
+	#ticker_proj_total_container, #ticker_mins_left_container {
 		display: inline-block;
 		padding-right: 5px;
 	}
@@ -205,7 +206,7 @@ custom_css = `
 	}
 
 	#ticker_player_rank_container img:not(:first-child) {
-    margin-left: 30px;
+		margin-left: 30px;
 	}
 
 	.fade_out {
@@ -228,21 +229,21 @@ custom_css = `
 		left: -520px;
 	}
 
-	#new_element {
-    position: absolute;
-    top: -26px;
-    left: -20px;
-    background-color: white;
-    height 50px;
+	#stats_title
+		position: absolute;
+		top: -26px;
+		left: -20px;
+		background-color: white;
+		height 50px;
     width: 220px;
-    padding-left: 30px;
+		padding-left: 30px;
 		margin-left: -20px;
 		font-weight: bold;
 		color: grey;
 		font-size: 1.2rem;
 	}
 	
-	#new_element:after {
+	#stats_title:after {
 		content: ' ';
 		width: 0;
 		height: 0;
@@ -313,9 +314,9 @@ const make_player_ranks_element = (original_player_ranks_div) => {
   let ranking_type_text = document.querySelectorAll(".ranking-type-text");
     
   if (original_player_ranks_div_clone_images.length > 0) {
-    let new_element = document.createElement("div");
-    new_element.id = "new_element";
-    new_element.innerText = ranking_type_text ? ranking_type_text[0].innerText : "";
+    let stats_title = document.createElement("div");
+    stats_title.id = "stats_title";
+    stats_title.innerText = ranking_type_text ? ranking_type_text[0].innerText : "";
     
     
     for (let i = 0; i < original_player_ranks_div_clone_images.length; i++) {

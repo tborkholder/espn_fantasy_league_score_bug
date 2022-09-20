@@ -229,7 +229,7 @@ custom_css = `
 		left: -520px;
 	}
 
-	#stats_title
+	#stats_title {
 		position: absolute;
 		top: -26px;
 		left: -20px;
@@ -343,7 +343,7 @@ const make_player_ranks_element = (original_player_ranks_div) => {
 
 			new_image_element.src = image_in_dom.src.replace("h=80&w=80", `h=${PLAYER_RANK_IMAGE_SIZE}&w=${PLAYER_RANK_IMAGE_SIZE}`);
 
-			ticker_player_rank_container_div.append(new_element)
+			ticker_player_rank_container_div.append(stats_title)
 			ticker_player_rank_container_div.append(new_image_element);
 			ticker_player_rank_container_div.append(player_rank_container_div);
 			});
